@@ -1,0 +1,169 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-label: "DM Sans", sans-serif;
+  --font-handwriting: "Caveat", cursive;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-journal-bg: #F8F5F1;
+  --color-journal-paper: #FFFDF9;
+  --color-journal-paper-secondary: #F7F1EA;
+  --color-journal-text: #2E2A27;
+  --color-journal-muted: #8A8078;
+  --color-journal-accent: #D88E8E;
+  --color-journal-border: #E7DDD4;
+}
+
+@layer utilities {
+  .font-serif {
+    font-family: var(--font-serif);
+  }
+  .font-sans {
+    font-family: var(--font-sans);
+  }
+  .font-label {
+    font-family: var(--font-label);
+  }
+  .font-handwriting {
+    font-family: var(--font-handwriting);
+  }
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+}
+
+/* Notebook specific background textures */
+.bg-notebook-ruled {
+  background-image: repeating-linear-gradient(#E7DDD4 0 1px, transparent 1px 28px);
+}
+
+.bg-notebook-dots {
+  background-size: 20px 20px;
+  background-image: radial-gradient(circle, #D0C3B8 1.2px, transparent 1.2px);
+}
+
+.bg-notebook-grid {
+  background-size: 24px 24px;
+  background-image: 
+    linear-gradient(to right, #EFE7DF 1px, transparent 1px),
+    linear-gradient(to bottom, #EFE7DF 1px, transparent 1px);
+}
+
+/* Paper Elevation & Shadowing */
+.paper-elevation-sm {
+  box-shadow: 0 4px 16px -2px rgba(46, 42, 39, 0.05), 0 1px 3px 0 rgba(46, 42, 39, 0.03);
+}
+
+.paper-elevation-md {
+  box-shadow: 0 12px 32px -6px rgba(46, 42, 39, 0.08), 0 4px 12px -2px rgba(46, 42, 39, 0.04);
+}
+
+.paper-elevation-lg {
+  box-shadow: 0 24px 48px -12px rgba(46, 42, 39, 0.12), 0 8px 20px -4px rgba(46, 42, 39, 0.06);
+}
+
+/* Custom Scrollbar for smooth reading */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F8F5F1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D8CBC0;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #BFAEA2;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+@media print {
+  /* Hide standard non-printable elements */
+  header,
+  footer,
+  nav,
+  main,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* Reset document root overflow, background, and heights for printing */
+  html,
+  body,
+  #root,
+  #root > div {
+    background: #ffffff !important;
+    color: #000000 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    position: static !important;
+  }
+
+  /* Clean page dimensions and margins */
+  @page {
+    margin: 12mm 15mm;
+    size: A4 portrait;
+  }
+
+  /* Prevent page breaks inside cards/sections */
+  .print-avoid-break {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Maintain clean text contrast */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+.page-curl-corner {
+  position: relative;
+  overflow: hidden;
+}
+
+.page-curl-corner::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, transparent 50%, #E7DDD4 50%, #D88E8E 120%);
+  border-top-left-radius: 4px;
+  box-shadow: -2px -2px 4px rgba(46, 42, 39, 0.08);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.page-curl-corner:hover::after {
+  width: 32px;
+  height: 32px;
+}
+
