@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { RESUME_DATA } from "../frontend/src/data/resumeData";
+import { RESUME_DATA } from "./_data";
 
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
