@@ -1,0 +1,7 @@
+{
+  "buildCommand": "vite build --config frontend/vite.config.ts",
+  "outputDirectory": "frontend/dist",
+  "rewrites": [
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
+}

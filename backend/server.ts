@@ -99,12 +99,14 @@ USER QUESTION: ${message}`;
   // Vite middleware for development vs static build in production
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
+      configFile: path.resolve(process.cwd(), "frontend/vite.config.ts"),
+      root: path.resolve(process.cwd(), "frontend"),
       server: { middlewareMode: true },
       appType: "spa",
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), "dist");
+    const distPath = path.join(process.cwd(), "frontend", "dist");
     app.use(express.static(distPath));
     app.get("*", (_req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
