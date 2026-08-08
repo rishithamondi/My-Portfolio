@@ -47,7 +47,9 @@ USER QUESTION: ${message}`;
       });
     }
 
-    const data = await geminiRes.json();
+    const data = await geminiRes.json() as {
+      candidates?: { content?: { parts?: { text?: string }[] } }[];
+    };
     const replyText =
       data?.candidates?.[0]?.content?.parts?.[0]?.text ||
       "Thank you for asking! Rishitha is an AI/ML and Full-Stack engineer specializing in voice AI, microservices, and React/Next.js systems.";
