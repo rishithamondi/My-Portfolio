@@ -1,6 +1,6 @@
-import { GoogleGenAI } from "@google/genai";
 import { RESUME_DATA } from "./_data";
 
+// Uses Gemini REST API directly via fetch — no SDK, no ESM/CJS compatibility issues.
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -19,7 +19,6 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const ai = new GoogleGenAI({ apiKey });
     const prompt = `You are the digital AI assistant embedded in Rishitha Mondi's personal engineering notebook.
 Answer questions accurately and concisely based ONLY on her resume details provided below.
 Maintain a warm, professional, notebook-curator tone.
@@ -29,14 +28,30 @@ ${JSON.stringify(RESUME_DATA, null, 2)}
 
 USER QUESTION: ${message}`;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: prompt,
-    });
+    const geminiRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+        }),
+      }
+    );
 
+    if (!geminiRes.ok) {
+      const errText = await geminiRes.text();
+      console.error("Gemini API error:", geminiRes.status, errText);
+      return res.json({
+        reply: `Rishitha Mondi is an AI/ML & Full-Stack Engineer currently interning at Kreative TimeBox on ConversaAI. She has expertise in React, Next.js, FastAPI, PostgreSQL, and LLM integrations with a 9.36 CGPA.`,
+      });
+    }
+
+    const data = await geminiRes.json();
     const replyText =
-      response.text ||
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
       "Thank you for asking! Rishitha is an AI/ML and Full-Stack engineer specializing in voice AI, microservices, and React/Next.js systems.";
+
     return res.json({ reply: replyText });
   } catch (err: unknown) {
     console.error("Error in /api/chat:", err);
